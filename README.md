@@ -13,10 +13,7 @@ women_safety/
 ├── README.md                 # This file
 ├── instance/
 │   └── women_safety.db       # SQLite database (auto-created)
-├── static/
-│   ├── css/                  # Additional CSS files (if any)
-│   ├── js/                   # Additional JS files (if any)
-│   └── recordings/           # Saved audio evidence files
+│        
 └── templates/
     ├── login.html            # Login page
     ├── register.html         # Registration page
