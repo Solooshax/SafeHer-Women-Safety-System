@@ -1,0 +1,2480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeHer – Dashboard</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --crimson: #C0392B;
+      --rose: #E74C3C;
+      --blush: #FADBD8;
+      --gold: #F39C12;
+      --emerald: #27AE60;
+      --sapphire: #2980B9;
+      --dark: #0e1206;
+      --mid: #1E0C0C;
+      --surface: #2A1010;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: rgba(255, 255, 255, 0.85);
+      --muted: rgba(255, 255, 255, 0.4);
+      --white: #FFFFFF;
+      --sidebar-w: 260px;
+    }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-height: 100vh;
+      background: rgba(255, 255, 255, 0.02);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+    }
+
+    .sidebar-brand {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--crimson), var(--rose));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 20px rgba(192, 57, 43, 0.4);
+      animation: pulse-soft 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-soft {
+
+      0%,
+      100% {
+        box-shadow: 0 0 20px rgba(192, 57, 43, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 35px rgba(192, 57, 43, 0.7);
+      }
+    }
+
+    .brand-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .brand-text span {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .user-card {
+      margin: 16px;
+      padding: 14px;
+      background: rgba(192, 57, 43, 0.1);
+      border: 1px solid rgba(192, 57, 43, 0.25);
+      border-radius: 14px;
+    }
+
+    .user-avatar {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--crimson), #922B21);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .user-card .user-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--white);
+    }
+
+    .user-card .user-status {
+      font-size: 11px;
+      color: var(--emerald);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--emerald);
+      border-radius: 50%;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    nav {
+      flex: 1;
+      padding: 16px 12px;
+      overflow-y: auto;
+    }
+
+    .nav-section {
+      margin-bottom: 24px;
+    }
+
+    .nav-section-title {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--white);
+    }
+
+    .nav-item.active {
+      background: rgba(192, 57, 43, 0.15);
+      color: var(--white);
+      border-left: 3px solid var(--crimson);
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      width: 22px;
+      text-align: center;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--crimson);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn-logout {
+      width: 100%;
+      padding: 11px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-logout:hover {
+      background: rgba(192, 57, 43, 0.1);
+      color: var(--rose);
+      border-color: rgba(192, 57, 43, 0.3);
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      padding: 20px 32px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.01);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(20px);
+    }
+
+    .topbar-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .topbar-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .topbar-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      display: none;
+      padding: 32px;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section-header {
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--white);
+    }
+
+    .section-desc {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    /* ── STAT CARDS ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .stat-card.red::before {
+      background: linear-gradient(90deg, var(--crimson), var(--rose));
+    }
+
+    .stat-card.gold::before {
+      background: linear-gradient(90deg, var(--gold), #F1C40F);
+    }
+
+    .stat-card.green::before {
+      background: linear-gradient(90deg, var(--emerald), #2ECC71);
+    }
+
+    .stat-card.blue::before {
+      background: linear-gradient(90deg, var(--sapphire), #3498DB);
+    }
+
+    .stat-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .stat-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .stat-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── SOS BUTTON ── */
+    .sos-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 0;
+    }
+
+    .sos-ring-outer {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sos-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid rgba(192, 57, 43, 0.3);
+      animation: ring-pulse 2s ease-out infinite;
+    }
+
+    .sos-ring:nth-child(1) {
+      width: 280px;
+      height: 280px;
+      animation-delay: 0s;
+    }
+
+    .sos-ring:nth-child(2) {
+      width: 240px;
+      height: 240px;
+      animation-delay: 0.5s;
+    }
+
+    .sos-ring:nth-child(3) {
+      width: 200px;
+      height: 200px;
+      animation-delay: 1s;
+    }
+
+    @keyframes ring-pulse {
+      0% {
+        opacity: 0.7;
+        transform: scale(0.9);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(1.1);
+      }
+    }
+
+    .sos-btn {
+      position: relative;
+      z-index: 10;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #E74C3C, #922B21);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 8px rgba(192, 57, 43, 0.15),
+        0 0 60px rgba(192, 57, 43, 0.5),
+        0 20px 60px rgba(0, 0, 0, 0.5);
+      transition: all 0.2s;
+    }
+
+    .sos-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 12px rgba(192, 57, 43, 0.2),
+        0 0 80px rgba(192, 57, 43, 0.7),
+        0 20px 80px rgba(0, 0, 0, 0.6);
+    }
+
+    .sos-btn:active {
+      transform: scale(0.97);
+    }
+
+    .sos-btn .sos-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      font-weight: 800;
+      color: white;
+      line-height: 1;
+    }
+
+    .sos-btn .sos-sub {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 2px;
+      margin-top: 3px;
+    }
+
+    .sos-info {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .sos-info p {
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 400px;
+    }
+
+    /* ── CONTACTS ── */
+    .contacts-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .btn-add {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, var(--crimson), var(--rose));
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-add:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(192, 57, 43, 0.4);
+    }
+
+    .contacts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .contact-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+      transition: all 0.3s;
+    }
+
+    .contact-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .contact-card.primary {
+      border-color: rgba(192, 57, 43, 0.4);
+      background: rgba(192, 57, 43, 0.06);
+    }
+
+    .contact-card-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .contact-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3D0C0C, var(--crimson));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .contact-name {
+      font-weight: 600;
+      color: var(--white);
+      font-size: 16px;
+    }
+
+    .contact-rel {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .contact-phone {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 14px;
+    }
+
+    .primary-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(192, 57, 43, 0.15);
+      border: 1px solid rgba(192, 57, 43, 0.3);
+      color: var(--rose);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .contact-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-sm {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .btn-sm.primary-btn {
+      background: rgba(192, 57, 43, 0.1);
+      color: var(--rose);
+    }
+
+    .btn-sm.primary-btn:hover {
+      background: rgba(192, 57, 43, 0.2);
+    }
+
+    .btn-sm.edit-btn {
+      background: rgba(41, 128, 185, 0.1);
+      color: #5DADE2;
+    }
+
+    .btn-sm.edit-btn:hover {
+      background: rgba(41, 128, 185, 0.2);
+    }
+
+    .btn-sm.delete-btn {
+      background: rgba(192, 57, 43, 0.08);
+      color: rgba(255, 100, 100, 0.8);
+    }
+
+    .btn-sm.delete-btn:hover {
+      background: rgba(192, 57, 43, 0.2);
+    }
+
+    /* ── AI FEATURES ── */
+    .ai-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .ai-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 26px;
+    }
+
+    .ai-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .ai-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .ai-icon.voice {
+      background: rgba(192, 57, 43, 0.15);
+      border: 1px solid rgba(192, 57, 43, 0.3);
+    }
+
+    .ai-icon.text {
+      background: rgba(41, 128, 185, 0.15);
+      border: 1px solid rgba(41, 128, 185, 0.3);
+    }
+
+    .ai-icon.gen {
+      background: rgba(243, 156, 18, 0.15);
+      border: 1px solid rgba(243, 156, 18, 0.3);
+    }
+
+    .ai-icon.audio {
+      background: rgba(39, 174, 96, 0.15);
+      border: 1px solid rgba(39, 174, 96, 0.3);
+    }
+
+    .ai-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .ai-card-desc {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .voice-monitor {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .voice-visualizer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      height: 60px;
+      margin: 16px 0;
+    }
+
+    .v-bar {
+      width: 5px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, var(--crimson), rgba(192, 57, 43, 0.3));
+      animation: none;
+      transition: height 0.1s;
+    }
+
+    .voice-monitor.active .v-bar {
+      animation: wave var(--dur, 0.8s) ease-in-out infinite;
+    }
+
+    @keyframes wave {
+
+      0%,
+      100% {
+        height: 8px;
+      }
+
+      50% {
+        height: 40px;
+      }
+    }
+
+    .v-bar:nth-child(1) {
+      --dur: 0.7s;
+    }
+
+    .v-bar:nth-child(2) {
+      --dur: 0.9s;
+    }
+
+    .v-bar:nth-child(3) {
+      --dur: 0.6s;
+    }
+
+    .v-bar:nth-child(4) {
+      --dur: 1.1s;
+    }
+
+    .v-bar:nth-child(5) {
+      --dur: 0.8s;
+    }
+
+    .v-bar:nth-child(6) {
+      --dur: 0.7s;
+    }
+
+    .v-bar:nth-child(7) {
+      --dur: 1.0s;
+    }
+
+    .v-bar:nth-child(8) {
+      --dur: 0.9s;
+    }
+
+    .v-bar:nth-child(9) {
+      --dur: 0.6s;
+    }
+
+    .v-bar:nth-child(10) {
+      --dur: 0.8s;
+    }
+
+    .voice-status {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .voice-transcript {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.6);
+      min-height: 50px;
+      font-family: 'JetBrains Mono', monospace;
+      text-align: left;
+      margin-top: 10px;
+      word-break: break-word;
+    }
+
+    .btn-voice {
+      padding: 11px 24px;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-voice.start {
+      background: linear-gradient(135deg, var(--crimson), var(--rose));
+      color: white;
+    }
+
+    .btn-voice.stop {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-voice:hover {
+      transform: translateY(-1px);
+    }
+
+    textarea.ai-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 14px;
+      resize: none;
+      height: 100px;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    textarea.ai-input:focus {
+      border-color: var(--sapphire);
+      box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.1);
+    }
+
+    .btn-analyze {
+      margin-top: 12px;
+      padding: 11px 24px;
+      background: linear-gradient(135deg, var(--sapphire), #3498DB);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-analyze:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 20px rgba(41, 128, 185, 0.4);
+    }
+
+    .analysis-result {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .analysis-result.safe {
+      background: rgba(39, 174, 96, 0.1);
+      border: 1px solid rgba(39, 174, 96, 0.3);
+    }
+
+    .analysis-result.unsafe {
+      background: rgba(192, 57, 43, 0.1);
+      border: 1px solid rgba(192, 57, 43, 0.3);
+    }
+
+    .result-label {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .result-label.safe {
+      color: var(--emerald);
+    }
+
+    .result-label.unsafe {
+      color: var(--rose);
+    }
+
+    .result-confidence {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .result-rec {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.65);
+      line-height: 1.5;
+    }
+
+    .generated-alert-box {
+      background: rgba(243, 156, 18, 0.08);
+      border: 1px solid rgba(243, 156, 18, 0.2);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      display: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+
+    .recording-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(39, 174, 96, 0.1);
+      border: 1px solid rgba(39, 174, 96, 0.3);
+      border-radius: 10px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--emerald);
+      display: none;
+    }
+
+    .rec-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--emerald);
+      border-radius: 50%;
+      animation: blink 1s ease-in-out infinite;
+    }
+
+    /* ── ALERT HISTORY ── */
+    .alert-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .alert-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .alert-table td {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .alert-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .alert-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-sos {
+      background: rgba(192, 57, 43, 0.15);
+      color: var(--rose);
+      border: 1px solid rgba(192, 57, 43, 0.3);
+    }
+
+    .badge-voice {
+      background: rgba(243, 156, 18, 0.15);
+      color: var(--gold);
+      border: 1px solid rgba(243, 156, 18, 0.3);
+    }
+
+    .badge-text {
+      background: rgba(41, 128, 185, 0.15);
+      color: #5DADE2;
+      border: 1px solid rgba(41, 128, 185, 0.3);
+    }
+
+    .badge-manual {
+      background: rgba(39, 174, 96, 0.15);
+      color: #2ECC71;
+      border: 1px solid rgba(39, 174, 96, 0.3);
+    }
+
+    .status-ok {
+      color: var(--emerald);
+      font-size: 12px;
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      display: none;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: #1E0C0C;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px;
+      width: 100%;
+      max-width: 460px;
+      animation: modal-in 0.3s ease;
+    }
+
+    @keyframes modal-in {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .modal .modal-sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+
+    .modal .form-group {
+      margin-bottom: 16px;
+    }
+
+    .modal label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    .modal input,
+    .modal select {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    .modal input:focus,
+    .modal select:focus {
+      border-color: var(--crimson);
+      background: rgba(192, 57, 43, 0.08);
+    }
+
+    .modal input::placeholder {
+      color: var(--muted);
+    }
+
+    .modal select option {
+      background: #2C1810;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      padding: 13px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-save {
+      flex: 2;
+      padding: 13px;
+      background: linear-gradient(135deg, var(--crimson), var(--rose));
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+    }
+
+    .btn-save:hover {
+      box-shadow: 0 5px 20px rgba(192, 57, 43, 0.4);
+    }
+
+    /* ── ALERT SUCCESS MODAL ── */
+    .alert-success-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .alert-success-modal.open {
+      display: flex;
+    }
+
+    .alert-success-card {
+      background: linear-gradient(160deg, #1A0A0A, #2C1010);
+      border: 1px solid rgba(192, 57, 43, 0.4);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+      animation: modal-in 0.4s ease;
+    }
+
+    .success-icon {
+      font-size: 60px;
+      margin-bottom: 16px;
+      animation: bounce 0.5s ease;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: scale(1)
+      }
+
+      50% {
+        transform: scale(1.2)
+      }
+    }
+
+    .alert-success-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .alert-success-card .tagline {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+
+    .alert-detail-grid {
+      text-align: left;
+      display: grid;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .alert-detail-row {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .alert-detail-row .d-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .alert-detail-row .d-value {
+      font-size: 14px;
+      color: var(--white);
+    }
+
+    .alert-detail-row .d-value a {
+      color: var(--rose);
+      text-decoration: none;
+    }
+
+    .alert-detail-row .d-value a:hover {
+      text-decoration: underline;
+    }
+
+    .status-delivered {
+      color: var(--emerald);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-close-alert {
+      padding: 14px 40px;
+      background: linear-gradient(135deg, var(--crimson), var(--rose));
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-state p {
+      font-size: 15px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 9999;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      color: white;
+      min-width: 250px;
+      max-width: 400px;
+      animation: toast-in 0.3s ease;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .toast.success {
+      background: linear-gradient(135deg, #1E8449, var(--emerald));
+    }
+
+    .toast.error {
+      background: linear-gradient(135deg, #922B21, var(--crimson));
+    }
+
+    .toast.info {
+      background: linear-gradient(135deg, #1A5276, var(--sapphire));
+    }
+
+    @keyframes toast-in {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .countdown-ring {
+      position: relative;
+      width: 60px;
+      height: 60px;
+    }
+
+    .countdown-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--rose);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .ai-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">🛡️</div>
+      <div class="brand-text">
+        <h2>SafeHer</h2>
+        <span>Safety System</span>
+      </div>
+    </div>
+
+    <div class="user-card">
+      <div class="user-avatar">👩</div>
+      <div class="user-name" id="sidebarName">{{ user.name }}</div>
+      <div class="user-status"><span class="status-dot"></span> Protected</div>
+    </div>
+
+    <nav>
+      <div class="nav-section">
+        <div class="nav-section-title">Main</div>
+        <div class="nav-item active" onclick="showSection('overview')">
+          <span class="nav-icon">🏠</span> Overview
+        </div>
+        <div class="nav-item" onclick="showSection('sos')">
+          <span class="nav-icon">🆘</span> SOS Emergency
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">AI Features</div>
+        <div class="nav-item" onclick="showSection('voiceguard')">
+          <span class="nav-icon">🎤</span> VoiceGuard AI
+        </div>
+        <div class="nav-item" onclick="showSection('textanalysis')">
+          <span class="nav-icon">🧠</span> Text Analysis
+        </div>
+        <div class="nav-item" onclick="showSection('alertgen')">
+          <span class="nav-icon">⚡</span> Alert Generator
+        </div>
+        <div class="nav-item" onclick="showSection('audioevidence')">
+          <span class="nav-icon">🎵</span> Audio Evidence
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-title">Manage</div>
+        <div class="nav-item" onclick="showSection('contacts')">
+          <span class="nav-icon">👥</span> Emergency Contacts
+          <span class="nav-badge" id="contactBadge">0</span>
+        </div>
+        <div class="nav-item" onclick="showSection('history')">
+          <span class="nav-icon">📋</span> Alert History
+          <span class="nav-badge" id="historyBadge">0</span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout" onclick="window.location.href='/logout'">🚪 Logout</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="topbarTitle">Overview</div>
+        <div class="topbar-sub">Welcome back, {{ user.name }}</div>
+      </div>
+      <div class="topbar-time" id="liveClock">--:--:--</div>
+    </div>
+<!-- ── EMERGENCY NOTIFICATIONS BANNER ── -->
+<div id="notif-container" style="display:none; position:fixed; top:0; left:0; right:0; z-index:9999;">
+</div>
+
+
+    <!-- OVERVIEW -->
+    <section class="section active" id="section-overview">
+      <div class="section-header">
+        <div class="section-title">Safety Dashboard</div>
+        <div class="section-desc">Your protection status at a glance</div>
+      </div>
+      <!-- Notification Bell (navbar mein laga lo) -->
+<span style="position:relative; cursor:pointer;" onclick="openNotifPanel()">
+  🔔 <span id="notif-badge" style="
+    display:none; position:absolute; top:-6px; right:-8px;
+    background:red; color:white; border-radius:50%;
+    font-size:11px; padding:1px 5px;">0</span>
+</span>
+
+<!-- Notification Side Panel -->
+<div id="notif-panel" style="
+  display:none; position:fixed; right:0; top:0; bottom:0; width:360px;
+  background:#1a1a2e; color:#fff; z-index:10000; overflow-y:auto;
+  box-shadow:-4px 0 20px rgba(0,0,0,0.5); padding:20px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+    <h3 style="margin:0;">🚨 Emergency Alerts</h3>
+    <div>
+      <button onclick="markAllRead()" style="background:#e94560;border:none;color:#fff;padding:4px 10px;border-radius:6px;cursor:pointer;margin-right:8px;font-size:12px;">Mark All Read</button>
+      <button onclick="closeNotifPanel()" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+  </div>
+  <div id="notif-list">Loading...</div>
+</div>
+
+<script>
+// ── Notification Logic ──
+
+function checkNotifications() {
+  fetch('/api/notifications/unread-count')
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.count > 0) {
+        document.getElementById('notif-badge').style.display = 'inline';
+        document.getElementById('notif-badge').textContent = data.count;
+        showEmergencyBanner(data.count);
+      } else {
+        document.getElementById('notif-badge').style.display = 'none';
+      }
+    });
+}
+
+function showEmergencyBanner(count) {
+  const container = document.getElementById('notif-container');
+  container.style.display = 'block';
+  container.innerHTML = `
+    <div style="background:#e94560;color:white;padding:12px 20px;
+      display:flex;justify-content:space-between;align-items:center;
+      font-weight:bold;font-size:14px;">
+      🚨 You have ${count} new emergency alert(s) from someone who listed you as emergency contact!
+      <span style="display:flex;gap:10px;">
+        <button onclick="openNotifPanel()" style="background:white;color:#e94560;border:none;
+          padding:6px 14px;border-radius:6px;cursor:pointer;font-weight:bold;">View Alerts</button>
+        <button onclick="document.getElementById('notif-container').style.display='none'"
+          style="background:none;border:none;color:white;font-size:18px;cursor:pointer;">✕</button>
+      </span>
+    </div>`;
+}
+
+function openNotifPanel() {
+  document.getElementById('notif-panel').style.display = 'block';
+  loadNotifications();
+}
+
+function closeNotifPanel() {
+  document.getElementById('notif-panel').style.display = 'none';
+}
+
+function loadNotifications() {
+  fetch('/api/notifications')
+    .then(r => r.json())
+    .then(data => {
+      const list = document.getElementById('notif-list');
+      if (!data.success || data.notifications.length === 0) {
+        list.innerHTML = '<p style="color:#aaa;text-align:center;margin-top:40px;">No emergency alerts received.</p>';
+        return;
+      }
+
+      list.innerHTML = data.notifications.map(n => {
+
+        // Audio URL build karo — agar '/recordings/' already hai toh waise hi use karo
+        let audioHTML = '';
+        if (n.audio_file) {
+          const audioSrc = n.audio_file.startsWith('/') ? n.audio_file : `/recordings/${n.audio_file}`;
+          audioHTML = `
+            <div style="margin-top:10px;">
+              <div style="font-size:12px;color:#4fc3f7;margin-bottom:4px;">🎙️ Voice Evidence Recording:</div>
+              <audio controls style="width:100%;height:36px;" 
+                     src="${audioSrc}"
+                     onerror="this.parentElement.innerHTML='<span style=color:#e94560;font-size:12px;>⚠️ Audio file unavailable</span>'">
+              </audio>
+            </div>`;
+        }
+
+        // Location
+        const locationHTML = n.location_link
+          ? `<a href="${n.location_link}" target="_blank" 
+               style="color:#4fc3f7;font-size:12px;display:block;margin-top:8px;text-decoration:none;">
+               📍 View Live Location on Google Maps
+             </a>`
+          : '<div style="font-size:12px;color:#888;margin-top:6px;">📍 Location not shared</div>';
+
+        return `
+          <div onclick="markRead(${n.id}, this)" style="
+            background:${n.is_read ? '#2a2a4a' : '#e9456022'};
+            border:1px solid ${n.is_read ? '#444' : '#e94560'};
+            border-radius:10px; padding:16px; margin-bottom:14px; cursor:pointer;
+            transition:all 0.3s;">
+
+            <!-- Header -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <strong style="color:#e94560;font-size:15px;">🚨 ${n.alert_type} Alert</strong>
+              ${!n.is_read ? '<span style="background:#e94560;color:white;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:bold;">NEW</span>' : ''}
+            </div>
+
+            <!-- Sender Info -->
+            <div style="background:#ffffff11;border-radius:8px;padding:10px;margin-bottom:10px;">
+              <div style="font-size:13px;color:#ddd;margin-bottom:4px;">
+                👤 From: <strong style="color:#fff;">${n.sender_name}</strong>
+              </div>
+              <div style="font-size:12px;color:#bbb;">
+                📞 Phone: ${n.sender_phone}
+              </div>
+            </div>
+
+            <!-- Alert Message -->
+            <div style="font-size:12px;color:#ccc;white-space:pre-wrap;
+              background:#00000033;padding:10px;border-radius:8px;
+              max-height:100px;overflow-y:auto;line-height:1.5;">
+              ${n.alert_message}
+            </div>
+
+            <!-- Location -->
+            ${locationHTML}
+
+            <!-- Audio Evidence -->
+            ${audioHTML}
+
+            <!-- Timestamp -->
+            <div style="font-size:11px;color:#888;margin-top:10px;text-align:right;">
+              ⏰ ${n.created_at}
+            </div>
+          </div>`;
+      }).join('');
+    });
+}
+
+function markRead(id, el) {
+  fetch(`/api/notifications/${id}/read`, { method: 'POST' })
+    .then(() => {
+      el.style.background = '#2a2a4a';
+      el.style.border = '1px solid #444';
+      el.querySelector('.NEW') && el.querySelector('.NEW').remove();
+      checkNotifications();
+    });
+}
+
+function markAllRead() {
+  fetch('/api/notifications/mark-all-read', { method: 'POST' })
+    .then(() => {
+      loadNotifications();
+      checkNotifications();
+      document.getElementById('notif-container').style.display = 'none';
+    });
+}
+
+// Page load pe check karo + har 30 sec mein poll karo
+checkNotifications();
+setInterval(checkNotifications, 30000);
+</script>
+      <div class="stats-grid">
+        <div class="stat-card red">
+          <div class="stat-icon">🆘</div>
+          <div class="stat-value" id="stat-sos">0</div>
+          <div class="stat-label">SOS Alerts Sent</div>
+        </div>
+        <div class="stat-card gold">
+          <div class="stat-icon">🎤</div>
+          <div class="stat-value" id="stat-voice">0</div>
+          <div class="stat-label">Voice Alerts</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon">👥</div>
+          <div class="stat-value" id="stat-contacts">0</div>
+          <div class="stat-label">Emergency Contacts</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-icon">📋</div>
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-label">Total Alerts</div>
+        </div>
+      </div>
+
+      <!-- Quick SOS in overview -->
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+        <div
+          style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:18px; padding:28px; text-align:center;">
+          <div
+            style="font-size:13px; color:var(--muted); margin-bottom:20px; text-transform:uppercase; letter-spacing:2px;">
+            Quick SOS</div>
+          <div class="sos-ring-outer" style="width:160px; height:160px; margin:0 auto 20px;">
+            <div class="sos-ring" style="width:160px; height:160px;"></div>
+            <div class="sos-ring" style="width:130px; height:130px;"></div>
+            <button class="sos-btn" style="width:95px; height:95px;" onclick="triggerSOS('Manual SOS Button')">
+              <span class="sos-text" style="font-size:24px;">SOS</span>
+              <span class="sos-sub">PRESS</span>
+            </button>
+          </div>
+          <p style="color:var(--muted); font-size:12px;">Tap to send emergency alert instantly</p>
+        </div>
+        <div
+          style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:18px; padding:28px;">
+          <div
+            style="font-size:13px; color:var(--muted); margin-bottom:16px; text-transform:uppercase; letter-spacing:2px;">
+            Primary Contact</div>
+          <div id="overview-primary-contact">
+            <div class="empty-state" style="padding:20px">
+              <div class="empty-icon" style="font-size:32px;">👤</div>
+              <p style="font-size:13px;">No primary contact set</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOS -->
+    <section class="section" id="section-sos">
+      <div class="section-header">
+        <div class="section-title">🆘 SOS Emergency</div>
+        <div class="section-desc">One tap sends your location to your emergency contact immediately</div>
+      </div>
+      <div class="sos-container">
+        <div class="sos-ring-outer">
+          <div class="sos-ring"></div>
+          <div class="sos-ring"></div>
+          <div class="sos-ring"></div>
+          <button class="sos-btn" onclick="triggerSOS('Manual SOS Button')">
+            <span class="sos-text">SOS</span>
+            <span class="sos-sub">TAP TO SEND</span>
+          </button>
+        </div>
+        <div class="sos-info">
+          <p>Pressing SOS will immediately share your GPS location and send an emergency alert to your primary emergency
+            contact.</p>
+          <div id="sos-location-status" style="margin-top:14px; font-size:13px; color:var(--muted);">
+            📍 Location will be fetched when SOS is triggered
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTS -->
+    <section class="section" id="section-contacts">
+      <div class="section-header">
+        <div class="section-title">👥 Emergency Contacts</div>
+        <div class="section-desc">Add up to 5 trusted contacts who will receive emergency alerts</div>
+      </div>
+      <div class="contacts-header">
+        <div id="contacts-count" style="color:var(--muted); font-size:14px;">Loading...</div>
+        <button class="btn-add" onclick="openAddContact()">+ Add Contact</button>
+      </div>
+      <div class="contacts-grid" id="contacts-grid">
+        <div class="empty-state">
+          <div class="empty-icon">👥</div>
+          <p>No contacts added yet</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VOICEGUARD AI -->
+    <section class="section" id="section-voiceguard">
+      <div class="section-header">
+        <div class="section-title">🎤 VoiceGuard AI</div>
+        <div class="section-desc">Continuously listens for distress keywords and triggers automatic emergency alerts
+        </div>
+      </div>
+      <div class="ai-grid">
+        <div class="ai-card" style="grid-column: span 2;">
+          <div class="ai-card-header">
+            <div class="ai-icon voice">🎤</div>
+            <div>
+              <div class="ai-card-title">Voice Distress Detection</div>
+              <div class="ai-card-desc">Keywords: Help, Save Me, Bachao, Emergency, Mujhe Bachao, Danger, Attack...
+              </div>
+            </div>
+          </div>
+          <div class="voice-monitor" id="voiceMonitor">
+            <div class="voice-visualizer" id="voiceVisualizer">
+              <div class="v-bar" style="height:8px"></div>
+              <div class="v-bar" style="height:8px"></div>
+              <div class="v-bar" style="height:8px"></div>
+              <div class="v-bar" style="height:8px"></div>
+              <div class="v-bar" style="height:8px"></div>
+              <div class="v-bar" style="height:8px"></div>
+              <div class="v-bar" style="height:8px"></div>
+              <div class="v-bar" style="height:8px"></div>
+              <div class="v-bar" style="height:8px"></div>
+              <div class="v-bar" style="height:8px"></div>
+            </div>
+            <div class="voice-status" id="voiceStatus">🎙️ Click Start to begin monitoring</div>
+            <div style="display:flex; gap:10px; justify-content:center; margin-bottom:12px;">
+              <button class="btn-voice start" id="btnStartVoice" onclick="startVoiceMonitoring()">▶ Start Voice
+                Monitoring</button>
+              <button class="btn-voice stop" id="btnStopVoice" onclick="stopVoiceMonitoring()" style="display:none">⏹
+                Stop Monitoring</button>
+            </div>
+            <div class="voice-transcript" id="voiceTranscript">Spoken words will appear here in real time...</div>
+            <div class="recording-indicator" id="recordingIndicator">
+              <div class="rec-dot"></div>
+              <span>Recording audio evidence...</span>
+              <span id="recTimer" style="margin-left:auto; font-family:'JetBrains Mono',monospace;">0s</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEXT ANALYSIS -->
+    <section class="section" id="section-textanalysis">
+      <div class="section-header">
+        <div class="section-title">🧠 AI Distress Text Analysis</div>
+        <div class="section-desc">Type your situation and AI will classify it as Safe or Unsafe</div>
+      </div>
+      <div style="max-width:700px;">
+        <div class="ai-card">
+          <div class="ai-card-header">
+            <div class="ai-icon text">🧠</div>
+            <div>
+              <div class="ai-card-title">Situation Safety Analyzer</div>
+              <div class="ai-card-desc">Powered by NLP keyword detection and sentiment analysis</div>
+            </div>
+          </div>
+          <label style="font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;">Describe Your
+            Situation</label>
+          <textarea class="ai-input" id="textInput"
+            placeholder="e.g. Someone is following me near the railway station..." style="margin-top:8px;"></textarea>
+          <div style="display:flex; gap:10px; align-items:center; margin-top:12px;">
+            <button class="btn-analyze" onclick="analyzeText()">🔍 Analyze Safety</button>
+            <button class="btn-analyze" onclick="document.getElementById('textInput').value=''"
+              style="background:rgba(255,255,255,0.06); border:1px solid var(--border);">Clear</button>
+          </div>
+          <div class="analysis-result" id="analysisResult">
+            <div class="result-label" id="resultLabel"></div>
+            <div class="result-confidence" id="resultConfidence"></div>
+            <div class="result-rec" id="resultRec"></div>
+            <button id="btnAlertFromText"
+              style="display:none; margin-top:12px; padding:10px 20px; background:linear-gradient(135deg,var(--crimson),var(--rose)); border:none; border-radius:10px; color:white; cursor:pointer; font-family:'DM Sans',sans-serif;"
+              onclick="triggerSOSFromText()">
+              🆘 Send Emergency Alert
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALERT GENERATOR -->
+    <section class="section" id="section-alertgen">
+      <div class="section-header">
+        <div class="section-title">⚡ AI Emergency Alert Generator</div>
+        <div class="section-desc">Generate professional emergency messages automatically using AI</div>
+      </div>
+      <div style="max-width:700px;">
+        <div class="ai-card">
+          <div class="ai-card-header">
+            <div class="ai-icon gen">⚡</div>
+            <div>
+              <div class="ai-card-title">Smart Alert Generator</div>
+              <div class="ai-card-desc">Converts your situation into a professional emergency alert message</div>
+            </div>
+          </div>
+          <label style="font-size:12px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;">Describe the
+            Emergency Situation</label>
+          <textarea class="ai-input" id="alertGenInput"
+            placeholder="e.g. A man is following me near the railway station..." style="margin-top:8px;"></textarea>
+          <div style="display:flex; gap:10px; margin-top:12px;">
+            <button class="btn-analyze" onclick="generateAlert()"
+              style="background:linear-gradient(135deg,var(--gold),#F1C40F); color:#000;">⚡ Generate Alert</button>
+            <button class="btn-analyze" onclick="sendGeneratedAlert()" id="btnSendGenAlert"
+              style="display:none; background:linear-gradient(135deg,var(--crimson),var(--rose));">🚨 Send This
+              Alert</button>
+          </div>
+          <div class="generated-alert-box" id="generatedAlertBox"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUDIO EVIDENCE -->
+    <section class="section" id="section-audioevidence">
+      <div class="section-header">
+        <div class="section-title">🎵 AI Audio Evidence</div>
+        <div class="section-desc">Record and preserve audio evidence during emergency situations</div>
+      </div>
+      <div style="max-width:700px;">
+        <div class="ai-card">
+          <div class="ai-card-header">
+            <div class="ai-icon audio">🎵</div>
+            <div>
+              <div class="ai-card-title">Audio Evidence Recorder</div>
+              <div class="ai-card-desc">Records up to 60 seconds of audio – automatically triggered by VoiceGuard</div>
+            </div>
+          </div>
+          <div style="text-align:center; padding:30px 0;">
+            <div id="audioRecordStatus" style="font-size:50px; margin-bottom:16px;">🎙️</div>
+            <div id="audioStatusText" style="color:var(--muted); font-size:14px; margin-bottom:20px;">Ready to record
+              audio evidence</div>
+            <div id="audioTimerDisplay"
+              style="font-family:'JetBrains Mono',monospace; font-size:36px; color:var(--white); margin-bottom:24px; display:none;">
+              0s / 60s</div>
+            <div style="display:flex; gap:12px; justify-content:center;">
+              <button class="btn-analyze" id="btnStartRecord" onclick="startManualRecording()"
+                style="background:linear-gradient(135deg,var(--emerald),#2ECC71);">🔴 Start Recording</button>
+              <button class="btn-analyze" id="btnStopRecord" onclick="stopManualRecording()"
+                style="display:none; background:rgba(255,255,255,0.06); border:1px solid var(--border);">⏹ Stop</button>
+            </div>
+          </div>
+          <div id="recordingsList" style="margin-top:20px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALERT HISTORY -->
+    <section class="section" id="section-history">
+      <div class="section-header">
+        <div class="section-title">📋 Alert History</div>
+        <div class="section-desc">Complete log of all emergency alerts sent from your account</div>
+      </div>
+      <div
+        style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:18px; overflow:hidden;">
+        <table class="alert-table" id="alertTable">
+          <thead>
+            <tr>
+              <th>Date & Time</th>
+              <th>Type</th>
+              <th>Contact</th>
+              <th>Location</th>
+              <th>Audio</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="alertTableBody">
+            <tr>
+              <td colspan="6" style="text-align:center; padding:40px; color:var(--muted);">Loading history...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- ADD/EDIT CONTACT MODAL -->
+  <div class="modal-overlay" id="contactModal">
+    <div class="modal">
+      <h3 id="modalTitle">Add Emergency Contact</h3>
+      <p class="modal-sub" id="modalSub">Add a trusted person who will receive emergency alerts</p>
+      <input type="hidden" id="editContactId">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="contactName" placeholder="e.g. Priya Sharma">
+      </div>
+      <div class="form-group">
+        <label>Relationship</label>
+        <select id="contactRelationship">
+          <option value="">Select Relationship</option>
+          <option>Mother</option>
+          <option>Father</option>
+          <option>Sister</option>
+          <option>Brother</option>
+          <option>Husband</option>
+          <option>Friend</option>
+          <option>Colleague</option>
+          <option>Neighbour</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="contactPhone" placeholder="+91 98765 43210">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeContactModal()">Cancel</button>
+        <button class="btn-save" onclick="saveContact()">Save Contact</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALERT SUCCESS MODAL -->
+  <div class="alert-success-modal" id="alertSuccessModal">
+    <div class="alert-success-card">
+      <div class="success-icon">🚨</div>
+      <h3>Emergency Alert Sent!</h3>
+      <p class="tagline">Your emergency contact has been notified immediately</p>
+      <div class="alert-detail-grid" id="alertDetailGrid"></div>
+      <button class="btn-close-alert" onclick="closeAlertModal()">✓ Acknowledged</button>
+    </div>
+  </div>
+
+  <script>
+    // ─────────────────────────────────────────
+    // CORE STATE
+    // ─────────────────────────────────────────
+    let voiceRecognition = null;
+    let isVoiceMonitoring = false;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let recordingTimer = null;
+    let recordingSeconds = 0;
+    let lastGeneratedAlert = '';
+    let currentUserLocation = null;
+
+    // ─────────────────────────────────────────
+    // LIVE CLOCK
+    // ─────────────────────────────────────────
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-IN', { hour12: true });
+    }
+    setInterval(updateClock, 1000); updateClock();
+
+    // ─────────────────────────────────────────
+    // SECTION NAV
+    // ─────────────────────────────────────────
+    const sectionTitles = {
+      overview: 'Overview', sos: '🆘 SOS Emergency',
+      contacts: '👥 Emergency Contacts', voiceguard: '🎤 VoiceGuard AI',
+      textanalysis: '🧠 Text Analysis', alertgen: '⚡ Alert Generator',
+      audioevidence: '🎵 Audio Evidence', history: '📋 Alert History'
+    };
+
+    function showSection(name) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('section-' + name).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => {
+        if (n.getAttribute('onclick') && n.getAttribute('onclick').includes(name)) n.classList.add('active');
+    });
+    document.getElementById('topbarTitle').textContent = sectionTitles[name] || name;
+    if (name === 'contacts') loadContacts();
+    if (name === 'history') loadAlertHistory();
+    if (name === 'overview') { loadStats(); loadOverviewPrimary(); }
+    if (name === 'audioevidence') loadSavedRecordings(); // ← yeh add karo
+}
+
+    // ─────────────────────────────────────────
+    // TOAST
+    // ─────────────────────────────────────────
+    function showToast(message, type = 'info', duration = 3000) {
+      const existing = document.querySelector('.toast');
+      if (existing) existing.remove();
+      const t = document.createElement('div');
+      t.className = `toast ${type}`; t.textContent = message;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), duration);
+    }
+
+    // ─────────────────────────────────────────
+    // GEOLOCATION
+    // ─────────────────────────────────────────
+    function getLocation() {
+      return new Promise((resolve) => {
+        if (!navigator.geolocation) { resolve(null); return; }
+        navigator.geolocation.getCurrentPosition(
+          pos => { currentUserLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude }; resolve(currentUserLocation); },
+          () => resolve(null), { timeout: 8000 }
+        );
+      });
+    }
+
+    // ─────────────────────────────────────────
+    // STATS
+    // ─────────────────────────────────────────
+    async function loadStats() {
+      const res = await fetch('/api/user/stats');
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('stat-sos').textContent = data.sos_alerts;
+        document.getElementById('stat-voice').textContent = data.voice_alerts;
+        document.getElementById('stat-contacts').textContent = data.total_contacts;
+        document.getElementById('stat-total').textContent = data.total_alerts;
+        document.getElementById('contactBadge').textContent = data.total_contacts;
+        document.getElementById('historyBadge').textContent = data.total_alerts;
+      }
+    }
+
+    async function loadOverviewPrimary() {
+      const res = await fetch('/api/contacts');
+      const data = await res.json();
+      const el = document.getElementById('overview-primary-contact');
+      if (data.success && data.contacts.length > 0) {
+        const primary = data.contacts.find(c => c.is_primary) || data.contacts[0];
+        el.innerHTML = `
+      <div style="display:flex; gap:14px; align-items:center;">
+        <div style="width:52px;height:52px;background:linear-gradient(135deg,#3D0C0C,var(--crimson));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;">👩</div>
+        <div>
+          <div style="font-weight:600;color:var(--white);font-size:16px;">${primary.name}</div>
+          <div style="font-size:12px;color:var(--muted);">${primary.relationship}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:rgba(255,255,255,0.6);margin-top:4px;">${primary.phone}</div>
+        </div>
+        <div style="margin-left:auto;background:rgba(192,57,43,0.15);border:1px solid rgba(192,57,43,0.3);color:var(--rose);font-size:10px;padding:4px 10px;border-radius:20px;">PRIMARY</div>
+      </div>`;
+      } else {
+        el.innerHTML = `<div class="empty-state" style="padding:20px"><div class="empty-icon" style="font-size:32px;">👤</div><p style="font-size:13px;">No contacts added yet.<br><a href="#" onclick="showSection('contacts')" style="color:var(--rose);">Add one now →</a></p></div>`;
+      }
+    }
+
+    // ─────────────────────────────────────────
+    // SOS
+    // ─────────────────────────────────────────
+    async function triggerSOS(triggeredBy = 'Manual SOS Button', audioFile = null, customMessage = null) {
+      showToast('📍 Fetching your location...', 'info', 2000);
+      const loc = await getLocation();
+      document.getElementById('sos-location-status').textContent =
+        loc ? `📍 Location: ${loc.lat.toFixed(4)}, ${loc.lng.toFixed(4)}` : '📍 Location unavailable';
+
+      const payload = {
+        lat: loc?.lat || null, lng: loc?.lng || null,
+        alert_type: triggeredBy.includes('Voice') ? 'VoiceGuard' : 'SOS',
+        triggered_by: triggeredBy, audio_file: audioFile
+      };
+
+      const res = await fetch('/api/sos', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        showAlertSuccessModal(data);
+        loadStats();
+      } else {
+        showToast('Failed to send alert. Add an emergency contact first!', 'error');
+      }
+    }
+
+    function showAlertSuccessModal(data) {
+      const grid = document.getElementById('alertDetailGrid');
+      grid.innerHTML = `
+    <div class="alert-detail-row">
+      <div class="d-label">👤 Recipient</div>
+      <div class="d-value">${data.contact_name} &nbsp;|&nbsp; ${data.contact_phone}</div>
+    </div>
+    <div class="alert-detail-row">
+      <div class="d-label">📱 Alert Message</div>
+      <div class="d-value" style="font-size:12px; white-space:pre-wrap; max-height:80px; overflow-y:auto;">${data.message}</div>
+    </div>
+    <div class="alert-detail-row">
+      <div class="d-label">📍 Live Location</div>
+      <div class="d-value">${data.location_link ? `<a href="${data.location_link}" target="_blank">📍 Open in Google Maps</a>` : 'Location unavailable'}</div>
+    </div>
+    <div class="alert-detail-row">
+      <div class="d-label">🎵 Audio Evidence</div>
+      <div class="d-value">${data.audio_file ? `voice_recording_${data.alert_id}.webm` : 'No recording attached'}</div>
+    </div>
+    <div class="alert-detail-row">
+      <div class="d-label">✅ Delivery Status</div>
+      <div class="d-value status-delivered">✅ Delivered Successfully — ${data.timestamp}</div>
+    </div>
+  `;
+      document.getElementById('alertSuccessModal').classList.add('open');
+    }
+
+    function closeAlertModal() {
+      document.getElementById('alertSuccessModal').classList.remove('open');
+    }
+
+    // ─────────────────────────────────────────
+    // CONTACTS
+    // ─────────────────────────────────────────
+    async function loadContacts() {
+      const res = await fetch('/api/contacts');
+      const data = await res.json();
+      const grid = document.getElementById('contacts-grid');
+      const count = document.getElementById('contacts-count');
+
+      if (!data.success || data.contacts.length === 0) {
+        grid.innerHTML = `<div class="empty-state"><div class="empty-icon">👥</div><p>No emergency contacts yet.<br>Add up to 5 trusted contacts.</p></div>`;
+        count.textContent = '0 / 5 contacts';
+        return;
+      }
+
+      count.textContent = `${data.contacts.length} / 5 contacts`;
+      document.getElementById('contactBadge').textContent = data.contacts.length;
+
+      grid.innerHTML = data.contacts.map(c => `
+    <div class="contact-card ${c.is_primary ? 'primary' : ''}">
+      <div class="contact-card-top">
+        <div class="contact-avatar">👩</div>
+        <div>
+          <div class="contact-name">${c.name}</div>
+          <div class="contact-rel">${c.relationship}</div>
+        </div>
+      </div>
+      <div class="contact-phone">📞 ${c.phone}</div>
+      ${c.is_primary ? '<div class="primary-badge">⭐ Primary Contact</div>' : ''}
+      <div class="contact-actions">
+        ${!c.is_primary ? `<button class="btn-sm primary-btn" onclick="setPrimary(${c.id})">Set Primary</button>` : ''}
+        <button class="btn-sm edit-btn" onclick="openEditContact(${c.id},'${c.name}','${c.relationship}','${c.phone}')">Edit</button>
+        <button class="btn-sm delete-btn" onclick="deleteContact(${c.id}, '${c.name}')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+    }
+
+    function openAddContact() {
+      document.getElementById('modalTitle').textContent = 'Add Emergency Contact';
+      document.getElementById('modalSub').textContent = 'Add a trusted person who will receive emergency alerts';
+      document.getElementById('editContactId').value = '';
+      document.getElementById('contactName').value = '';
+      document.getElementById('contactRelationship').value = '';
+      document.getElementById('contactPhone').value = '';
+      document.getElementById('contactModal').classList.add('open');
+    }
+
+    function openEditContact(id, name, rel, phone) {
+      document.getElementById('modalTitle').textContent = 'Edit Contact';
+      document.getElementById('modalSub').textContent = 'Update contact information';
+      document.getElementById('editContactId').value = id;
+      document.getElementById('contactName').value = name;
+      document.getElementById('contactRelationship').value = rel;
+      document.getElementById('contactPhone').value = phone;
+      document.getElementById('contactModal').classList.add('open');
+    }
+
+    function closeContactModal() { document.getElementById('contactModal').classList.remove('open'); }
+
+    async function saveContact() {
+      const id = document.getElementById('editContactId').value;
+      const name = document.getElementById('contactName').value.trim();
+      const relationship = document.getElementById('contactRelationship').value;
+      const phone = document.getElementById('contactPhone').value.trim();
+      if (!name || !relationship || !phone) { showToast('All fields are required', 'error'); return; }
+
+      const url = id ? `/api/contacts/${id}` : '/api/contacts';
+      const method = id ? 'PUT' : 'POST';
+      const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, relationship, phone }) });
+      const data = await res.json();
+      if (data.success) { showToast(data.message, 'success'); closeContactModal(); loadContacts(); loadStats(); }
+      else showToast(data.message || 'Error saving contact', 'error');
+    }
+
+    async function setPrimary(id) {
+      const res = await fetch(`/api/contacts/${id}/set-primary`, { method: 'POST' });
+      const data = await res.json();
+      if (data.success) { showToast(data.message, 'success'); loadContacts(); loadOverviewPrimary(); }
+    }
+
+    async function deleteContact(id, name) {
+      if (!confirm(`Delete contact "${name}"?`)) return;
+      const res = await fetch(`/api/contacts/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) { showToast(data.message, 'success'); loadContacts(); loadStats(); }
+    }
+
+    // ─────────────────────────────────────────
+    // VOICEGUARD AI
+    // ─────────────────────────────────────────
+    function startVoiceMonitoring() {
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        showToast('Speech recognition not supported in this browser. Use Chrome.', 'error'); return;
+      }
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      voiceRecognition = new SR();
+      voiceRecognition.continuous = true;
+      voiceRecognition.interimResults = true;
+      voiceRecognition.lang = 'en-IN';
+      isVoiceMonitoring = true;
+
+      document.getElementById('btnStartVoice').style.display = 'none';
+      document.getElementById('btnStopVoice').style.display = 'inline-block';
+      document.getElementById('voiceMonitor').classList.add('active');
+      document.getElementById('voiceStatus').textContent = '🎙️ Monitoring active – speak naturally...';
+
+      voiceRecognition.onresult = async (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        document.getElementById('voiceTranscript').textContent = transcript;
+
+        // Check with backend
+        const res = await fetch('/api/ai/voice-distress', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: transcript })
+        });
+        const data = await res.json();
+        if (data.distress_detected && isVoiceMonitoring) {
+          document.getElementById('voiceStatus').textContent = `🚨 DISTRESS DETECTED: "${data.keywords.join(', ')}"`;
+          showToast('⚠️ Distress keyword detected! Triggering emergency...', 'error', 4000);
+          stopVoiceMonitoring();
+          // Start recording audio evidence
+          startAutoRecording(async (audioFile) => {
+            await triggerSOS('VoiceGuard AI Detection', audioFile);
+          });
+        }
+      };
+
+      voiceRecognition.onerror = (e) => {
+        if (e.error !== 'no-speech') showToast('Microphone error: ' + e.error, 'error');
+      };
+
+      voiceRecognition.onend = () => {
+        if (isVoiceMonitoring) voiceRecognition.start(); // restart for continuous
+      };
+
+      voiceRecognition.start();
+    }
+
+    function stopVoiceMonitoring() {
+      isVoiceMonitoring = false;
+      if (voiceRecognition) voiceRecognition.stop();
+      document.getElementById('btnStartVoice').style.display = 'inline-block';
+      document.getElementById('btnStopVoice').style.display = 'none';
+      document.getElementById('voiceMonitor').classList.remove('active');
+      document.getElementById('voiceStatus').textContent = '🎙️ Monitoring stopped';
+    }
+
+    // ─────────────────────────────────────────
+    // AUDIO RECORDING
+    // ─────────────────────────────────────────
+    async function startAutoRecording(callback) {
+      const indicator = document.getElementById('recordingIndicator');
+      indicator.style.display = 'flex';
+      let seconds = 0;
+      const recInterval = setInterval(() => {
+        seconds++;
+        document.getElementById('recTimer').textContent = seconds + 's';
+        if (seconds >= 30) { clearInterval(recInterval); stopAudioRecording(callback); }
+      }, 1000);
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioChunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = async () => {
+    const blob = new Blob(audioChunks, { type: 'audio/webm' });
+    const formData = new FormData();
+    formData.append('audio', blob, 'recording.webm');
+    try {
+        const res = await fetch('/api/ai/save-recording', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.success) {
+            indicator.style.display = 'none';
+            // ← filepath pass karo, filename nahi
+            if (callback) callback(data.filepath);
+        }
+    } catch (e) {
+        indicator.style.display = 'none';
+        if (callback) callback(null);
+    }
+};
+        mediaRecorder.start();
+        setTimeout(() => { if (mediaRecorder && mediaRecorder.state !== 'inactive') { clearInterval(recInterval); stopAudioRecording(callback); } }, 30000);
+      } catch (e) {
+        clearInterval(recInterval); indicator.style.display = 'none';
+        if (callback) callback(null);
+      }
+    }
+
+    function stopAudioRecording(callback) {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+    }
+
+    // Manual recording
+    async function startManualRecording() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioChunks = [];
+        recordingSeconds = 0;
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = async () => {
+            clearInterval(recordingTimer);
+            const blob = new Blob(audioChunks, { type: 'audio/webm' });
+            const formData = new FormData();
+            formData.append('audio', blob, 'manual_recording.webm');
+            const res = await fetch('/api/ai/save-recording', { method: 'POST', body: formData });
+            const data = await res.json();
+
+            document.getElementById('btnStartRecord').style.display = 'block';
+            document.getElementById('btnStopRecord').style.display = 'none';
+            document.getElementById('audioTimerDisplay').style.display = 'none';
+            document.getElementById('audioRecordStatus').textContent = '✅';
+            document.getElementById('audioStatusText').textContent = 'Recording saved!';
+
+            if (data.success) {
+                showToast('🎵 Recording saved successfully!', 'success');
+                loadSavedRecordings(); // ← DB se fresh load karo
+            }
+        };
+        mediaRecorder.start();
+        document.getElementById('btnStartRecord').style.display = 'none';
+        document.getElementById('btnStopRecord').style.display = 'block';
+        document.getElementById('audioTimerDisplay').style.display = 'block';
+        document.getElementById('audioRecordStatus').textContent = '🔴';
+        document.getElementById('audioStatusText').textContent = 'Recording in progress...';
+        recordingTimer = setInterval(() => {
+            recordingSeconds++;
+            document.getElementById('audioTimerDisplay').textContent = `${recordingSeconds}s / 60s`;
+            if (recordingSeconds >= 60) stopManualRecording();
+        }, 1000);
+    } catch (e) {
+        showToast('Microphone access denied', 'error');
+    }
+}
+
+    function stopManualRecording() {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+    }
+
+    // ─────────────────────────────────────────
+    // AI TEXT ANALYSIS
+    // ─────────────────────────────────────────
+    async function analyzeText() {
+      const text = document.getElementById('textInput').value.trim();
+      if (!text) { showToast('Please enter a situation to analyze', 'error'); return; }
+      const res = await fetch('/api/ai/analyze-text', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text })
+      });
+      const data = await res.json();
+      const result = document.getElementById('analysisResult');
+      const label = document.getElementById('resultLabel');
+      const conf = document.getElementById('resultConfidence');
+      const rec = document.getElementById('resultRec');
+      const btnAlert = document.getElementById('btnAlertFromText');
+
+      result.className = 'analysis-result ' + (data.is_unsafe ? 'unsafe' : 'safe');
+      result.style.display = 'block';
+      label.className = 'result-label ' + (data.is_unsafe ? 'unsafe' : 'safe');
+      label.textContent = (data.is_unsafe ? '⚠️ UNSAFE' : '✅ SAFE') + ' – ' + data.label;
+      conf.textContent = `Confidence: ${data.confidence}% | Detected: ${data.matched_phrases.length > 0 ? data.matched_phrases.join(', ') : 'No specific phrases'}`;
+      rec.textContent = data.recommendation;
+      btnAlert.style.display = data.is_unsafe ? 'block' : 'none';
+    }
+
+    async function triggerSOSFromText() {
+      const text = document.getElementById('textInput').value.trim();
+      await triggerSOS('AI Text Analysis', null);
+    }
+
+    // ─────────────────────────────────────────
+    // AI ALERT GENERATOR
+    // ─────────────────────────────────────────
+    async function generateAlert() {
+      const situation = document.getElementById('alertGenInput').value.trim();
+      if (!situation) { showToast('Please describe the emergency situation', 'error'); return; }
+      const loc = await getLocation();
+      const res = await fetch('/api/ai/generate-alert', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ situation, lat: loc?.lat, lng: loc?.lng })
+      });
+      const data = await res.json();
+      const box = document.getElementById('generatedAlertBox');
+      lastGeneratedAlert = data.message;
+      box.textContent = data.message;
+      box.style.display = 'block';
+      document.getElementById('btnSendGenAlert').style.display = 'block';
+    }
+
+    async function sendGeneratedAlert() {
+      await triggerSOS('AI Alert Generator');
+    }
+
+    async function loadSavedRecordings() {
+    const res = await fetch('/api/recordings');
+    const data = await res.json();
+    const list = document.getElementById('recordingsList');
+
+    if (!data.success || data.recordings.length === 0) {
+        list.innerHTML = `<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">
+            🎵 No recordings saved yet. Start recording above.
+        </div>`;
+        return;
+    }
+
+    list.innerHTML = `
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;">
+            Saved Recordings (${data.recordings.length})
+        </div>` +
+        data.recordings.map(r => `
+        <div style="background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.25);
+             border-radius:12px;padding:14px;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                <span style="font-size:22px;">🎵</span>
+                <div style="flex:1;">
+                    <div style="color:var(--white);font-size:13px;font-family:'JetBrains Mono',monospace;
+                         word-break:break-all;">${r.filename}</div>
+                    <div style="color:var(--muted);font-size:11px;margin-top:3px;">
+                        📅 ${r.created_at} &nbsp;|&nbsp; 💾 ${r.size_kb} KB
+                    </div>
+                </div>
+            </div>
+            <audio controls src="${r.filepath}" style="width:100%;height:36px;"
+                   onerror="this.parentElement.innerHTML+='<div style=color:#e94560;font-size:12px;margin-top:6px;>⚠️ File unavailable</div>'">
+            </audio>
+            <div style="margin-top:10px;display:flex;gap:8px;">
+                <button onclick="attachToSOS('${r.filepath}')"
+                    style="flex:1;padding:8px;background:rgba(192,57,43,0.15);border:1px solid rgba(192,57,43,0.3);
+                           border-radius:8px;color:var(--rose);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;">
+                    🚨 Attach to SOS Alert
+                </button>
+                <a href="${r.filepath}" download
+                    style="flex:1;padding:8px;background:rgba(41,128,185,0.1);border:1px solid rgba(41,128,185,0.3);
+                           border-radius:8px;color:#5DADE2;font-size:12px;cursor:pointer;text-align:center;
+                           text-decoration:none;display:block;">
+                    ⬇️ Download
+                </a>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function attachToSOS(audioFilepath) {
+    if (!confirm('Send emergency SOS alert with this audio recording attached?')) return;
+    await triggerSOS('Manual SOS with Audio Evidence', audioFilepath);
+}
+    // ─────────────────────────────────────────
+    // ALERT HISTORY
+    // ─────────────────────────────────────────
+    async function loadAlertHistory() {
+      const res = await fetch('/api/alerts');
+      const data = await res.json();
+      const tbody = document.getElementById('alertTableBody');
+      document.getElementById('historyBadge').textContent = data.alerts?.length || 0;
+      if (!data.alerts || data.alerts.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:50px;color:var(--muted);">No alerts recorded yet. Stay safe! 💙</td></tr>`;
+        return;
+      }
+      const badgeClass = { SOS: 'badge-sos', VoiceGuard: 'badge-voice', 'AI Text Analysis': 'badge-text' };
+      tbody.innerHTML = data.alerts.map(a => `
+    <tr>
+      <td style="font-size:12px;">${a.created_at}</td>
+      <td><span class="alert-type-badge ${badgeClass[a.alert_type] || 'badge-manual'}">${a.alert_type}</span></td>
+      <td>${a.contact_name}<br><span style="color:var(--muted);font-size:12px;">${a.contact_phone}</span></td>
+      <td>${a.location_link ? `<a href="${a.location_link}" target="_blank" style="color:var(--rose);">📍 View Map</a>` : '<span style="color:var(--muted)">—</span>'}</td>
+      <td>${a.audio_file ? `<span style="color:var(--emerald)">🎵 ${a.audio_file.substring(0, 20)}...</span>` : '<span style="color:var(--muted)">—</span>'}</td>
+      <td><span class="status-ok">✅ ${a.status}</span></td>
+    </tr>
+  `).join('');
+    }
+
+    // ─────────────────────────────────────────
+    // INIT
+    // ─────────────────────────────────────────
+    loadStats();
+    loadOverviewPrimary();
+  </script>
+</body>
+
+</html>

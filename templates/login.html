@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeHer – Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --crimson: #C0392B;
+  --rose: #E74C3C;
+  --blush: #FADBD8;
+  --gold: #F39C12;
+  --dark: #1A0A0A;
+  --mid: #2C1810;
+  --light: #FDF2F0;
+  --white: #FFFFFF;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--dark);
+  display: flex;
+  font-family: 'DM Sans', sans-serif;
+  overflow: hidden;
+}
+
+.bg-art {
+  position: fixed; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse at 20% 50%, #3D0C0C 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, #1E0808 0%, transparent 50%),
+              radial-gradient(ellipse at 60% 80%, #2A0A0A 0%, transparent 50%),
+              #0D0303;
+}
+
+.bg-art::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: 
+    radial-gradient(circle at 25% 40%, rgba(192,57,43,0.15) 0%, transparent 40%),
+    radial-gradient(circle at 75% 60%, rgba(231,76,60,0.08) 0%, transparent 35%);
+}
+
+.bg-pattern {
+  position: fixed; inset: 0; z-index: 0; opacity: 0.04;
+  background-image: repeating-linear-gradient(
+    45deg, rgba(255,255,255,0.3) 0px, rgba(255,255,255,0.3) 1px,
+    transparent 1px, transparent 40px
+  );
+}
+
+.left-panel {
+  position: relative; z-index: 1;
+  width: 55%; display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  padding: 60px;
+}
+
+.brand {
+  text-align: center; margin-bottom: 50px;
+}
+
+.brand-icon {
+  width: 80px; height: 80px;
+  background: linear-gradient(135deg, var(--crimson), var(--rose));
+  border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; margin: 0 auto 20px;
+  font-size: 36px; box-shadow: 0 0 40px rgba(192,57,43,0.5);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 40px rgba(192,57,43,0.5); }
+  50% { box-shadow: 0 0 70px rgba(192,57,43,0.8), 0 0 100px rgba(192,57,43,0.3); }
+}
+
+.brand h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 52px; font-weight: 900;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FADBD8 50%, var(--rose) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: -1px; line-height: 1;
+}
+
+.brand p {
+  color: rgba(255,255,255,0.45);
+  font-size: 14px; letter-spacing: 3px;
+  text-transform: uppercase; margin-top: 8px;
+}
+
+.features-list {
+  list-style: none; text-align: left;
+}
+
+.features-list li {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.7); font-size: 15px;
+  animation: slide-in 0.5s ease forwards;
+  opacity: 0; transform: translateX(-20px);
+}
+
+.features-list li:nth-child(1) { animation-delay: 0.2s; }
+.features-list li:nth-child(2) { animation-delay: 0.4s; }
+.features-list li:nth-child(3) { animation-delay: 0.6s; }
+.features-list li:nth-child(4) { animation-delay: 0.8s; }
+.features-list li:nth-child(5) { animation-delay: 1.0s; }
+
+@keyframes slide-in {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.feat-icon {
+  width: 38px; height: 38px;
+  background: rgba(192,57,43,0.15);
+  border: 1px solid rgba(192,57,43,0.3);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+
+.right-panel {
+  position: relative; z-index: 1;
+  width: 45%;
+  background: rgba(255,255,255,0.03);
+  border-left: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(20px);
+}
+
+.form-box {
+  width: 100%; max-width: 400px;
+  padding: 50px 40px;
+}
+
+.form-box h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px; color: var(--white);
+  margin-bottom: 6px;
+}
+
+.form-box .subtitle {
+  color: rgba(255,255,255,0.4); font-size: 14px;
+  margin-bottom: 40px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block; color: rgba(255,255,255,0.6);
+  font-size: 12px; font-weight: 500;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%; padding: 14px 18px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px; color: var(--white);
+  font-family: 'DM Sans', sans-serif; font-size: 15px;
+  transition: all 0.3s;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: var(--crimson);
+  background: rgba(192,57,43,0.08);
+  box-shadow: 0 0 0 3px rgba(192,57,43,0.15);
+}
+
+.form-group input::placeholder { color: rgba(255,255,255,0.2); }
+
+.btn-login {
+  width: 100%; padding: 16px;
+  background: linear-gradient(135deg, var(--crimson), var(--rose));
+  border: none; border-radius: 12px;
+  color: white; font-family: 'DM Sans', sans-serif;
+  font-size: 16px; font-weight: 500;
+  cursor: pointer; margin-top: 10px;
+  transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+
+.btn-login::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+
+.btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(192,57,43,0.5); }
+.btn-login:hover::before { opacity: 1; }
+.btn-login:active { transform: translateY(0); }
+
+.form-footer {
+  text-align: center; margin-top: 24px;
+  color: rgba(255,255,255,0.4); font-size: 14px;
+}
+
+.form-footer a {
+  color: var(--rose); text-decoration: none; font-weight: 500;
+}
+
+.form-footer a:hover { color: var(--blush); }
+
+.alert-msg {
+  padding: 12px 16px; border-radius: 10px;
+  font-size: 14px; margin-bottom: 20px;
+  display: none;
+}
+.alert-msg.error { background: rgba(192,57,43,0.15); border: 1px solid rgba(192,57,43,0.4); color: #FADBD8; display: block; }
+.alert-msg.success { background: rgba(39,174,96,0.15); border: 1px solid rgba(39,174,96,0.4); color: #A9DFBF; display: block; }
+
+.loading-spinner {
+  display: inline-block; width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white; border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle; margin-right: 8px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="bg-art"></div>
+<div class="bg-pattern"></div>
+
+<div class="left-panel">
+  <div class="brand">
+    <div class="brand-icon">🛡️</div>
+    <h1>SafeHer</h1>
+    <p>Women Safety & Emergency Alert System</p>
+  </div>
+  <ul class="features-list">
+    <li><span class="feat-icon">📍</span> Real-Time GPS Location Sharing</li>
+    <li><span class="feat-icon">🎤</span> VoiceGuard AI – Distress Detection</li>
+    <li><span class="feat-icon">🧠</span> AI Text Safety Analysis</li>
+    <li><span class="feat-icon">🆘</span> One-Tap SOS Emergency Alert</li>
+    <li><span class="feat-icon">🎵</span> AI Audio Evidence Recording</li>
+  </ul>
+</div>
+
+<div class="right-panel">
+  <div class="form-box">
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Login to your SafeHer account</p>
+    <div class="alert-msg" id="alertMsg"></div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="email" placeholder="your@email.com">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')loginUser()">
+    </div>
+    <button class="btn-login" id="loginBtn" onclick="loginUser()">Login to SafeHer</button>
+    <div class="form-footer">
+      Don't have an account? <a href="/register">Register here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+async function loginUser() {
+  const btn = document.getElementById('loginBtn');
+  const msg = document.getElementById('alertMsg');
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  msg.className = 'alert-msg'; msg.textContent = '';
+
+  if (!email || !password) {
+    msg.className = 'alert-msg error'; msg.textContent = 'Please fill all fields.'; return;
+  }
+
+  btn.innerHTML = '<span class="loading-spinner"></span> Logging in...';
+  btn.disabled = true;
+
+  const res = await fetch('/login', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({email, password})
+  });
+  const data = await res.json();
+  if (data.success) {
+    msg.className = 'alert-msg success'; msg.textContent = 'Login successful! Redirecting...';
+    setTimeout(() => window.location.href = '/dashboard', 800);
+  } else {
+    msg.className = 'alert-msg error'; msg.textContent = data.message || 'Login failed.';
+    btn.innerHTML = 'Login to SafeHer'; btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
